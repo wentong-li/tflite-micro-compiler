@@ -17,7 +17,7 @@ template <int SZ, class T>
 struct TfArray {
   int sz;
   T elem[SZ];
-
+};
 
 ${kernel_region}
 
@@ -28,7 +28,7 @@ ${tensor_region}
 ${node_region}
 
 }
-
+static TfLiteContext context;
 static void* AllocatePersistentBuffer(TfLiteContext *ctx, size_t bytes) {
 		return std::malloc(bytes);
 }
@@ -58,7 +58,7 @@ void autogen_init(void) {
 	op_init();
 	class tflite::MyMicroContext my_context = tflite::MyMicroContext(NULL, NULL, NULL, tflTensors);
 	std::cout << sizeof(my_context) <<std::endl;
-	static TfLiteContext context;
+	
 	context.impl_ = &my_context;
 	context.AllocatePersistentBuffer = &AllocatePersistentBuffer;
 	// context.RequestScratchBufferInArena = &RequestScratchBufferInArena;
@@ -66,7 +66,7 @@ void autogen_init(void) {
 	context.GetTensor = &GetTensor;
 	context.GetEvalTensor = &GetEvalTensor;
 	context.tensors = tflTensors;
-	context.tensors_size = ${node_count};
+	context.tensors_size = ${tensor_count};
 
 
 	for (int i = 0; i < ${node_count}; i++) {
@@ -85,5 +85,4 @@ void autogen_run(void){
 			return;
 		}
 	}
-}
 };
