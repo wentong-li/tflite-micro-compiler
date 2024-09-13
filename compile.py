@@ -250,7 +250,9 @@ def main():
 				buffer_region=buffer_str,\
 				tensor_region=tensor_str,\
 				node_region=node_str,\
-				node_count=model.Subgraphs(0).OperatorsLength()))
+				node_count=model.Subgraphs(0).OperatorsLength(),\
+				tensor_count=model.Subgraphs(0).TensorsLength())
+			)
 	f.close()
 	os.system('clang-format -i model.cc')
 
